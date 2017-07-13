@@ -17,7 +17,13 @@ __attribute__ ((section(".attributes")))
 struct {
 	char    flag_bootloader_exists[14];
 	char    flag_version_string[8];
-	uint8_t flags_reserved[490];
+	uint8_t flags_reserved[470];
+	// Fields that get populdated when the kernel wants to do a firmware update.
+	uint32_t signpost_tock_firmware_update_enable;
+	uint32_t signpost_tock_firmware_update_source;
+	uint32_t signpost_tock_firmware_update_destination;
+	uint32_t signpost_tock_firmware_update_length;
+	uint32_t signpost_tock_firmware_update_crc;
 	char    attribute00[ATTRIBUTES_00_LEN];
 	uint8_t attribute00_padding[64-ATTRIBUTES_00_LEN];
 	char    attribute01[ATTRIBUTES_01_LEN];
@@ -27,8 +33,9 @@ struct {
 	uint8_t attributes[832];
 } attributes = {
 	{'T', 'O', 'C', 'K', 'B', 'O', 'O', 'T', 'L', 'O', 'A', 'D', 'E', 'R'},
-	{'0', '.', '6', '.', '0', '\0', '\0', '\0'},
+	{'0', '.', '1', '0', '.', '0', '\0', '\0'},
     {0x00},
+    0x00, 0x00, 0x00, 0x00, 0x00,
     ATTRIBUTES_00_DEF,
     {0x00},
     ATTRIBUTES_01_DEF,

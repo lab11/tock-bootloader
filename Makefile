@@ -20,8 +20,6 @@ src/ASF/sam/utils/cmsis/sam4l/source/templates/system_sam4l.c \
 src/ASF/sam/utils/syscalls/gcc/syscalls.c \
 src/main.c \
 src/attributes.c \
-src/bootloader.c \
-src/bl_commands.c \
 src/crc32.c
 
 OBJS +=  \
@@ -41,20 +39,10 @@ build/src/ASF/sam/utils/cmsis/sam4l/source/templates/system_sam4l.o \
 build/src/ASF/sam/utils/syscalls/gcc/syscalls.o \
 build/src/main.o \
 build/src/attributes.o \
-build/src/bootloader.o \
-build/src/bl_commands.o \
 build/src/crc32.o \
 build/src/jumpfunc.o
 
-# Hack so you can do `make imix`, etc.
-TOCK_BOARD=$(firstword $(MAKECMDGOALS))
-ifneq ($(TOCK_BOARD), )
-BOARD = $(TOCK_BOARD)
-CFLAGS += -DTOCK_BOARD=$(TOCK_BOARD)
-CFLAGS += -DTOCK_BOARD_$(TOCK_BOARD)=1
-endif
-
-BINARY_NAME=$(TOCK_BOARD)_bootloader
+BINARY_NAME=signpost_bootloader
 
 OUTPUT_FILE_PATH += build/$(BINARY_NAME).bin
 CCBIN=arm-none-eabi-gcc
@@ -156,10 +144,6 @@ build/$(BINARY_NAME).elf: $(OBJS) $(USER_OBJS)
 
 build/$(BINARY_NAME).bin: build/$(BINARY_NAME).elf
 	$(OBJCOPY) -Obinary $^ $@
-
-hail: all
-imix: all
-justjump: all
 
 # Other Targets
 clean:
